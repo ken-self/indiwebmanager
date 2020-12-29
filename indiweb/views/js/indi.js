@@ -373,10 +373,12 @@ function rebootSystem() {
     if (!confirm("Please press OK to confirm remote system Reboot")) {
         return;
     }
-
+    var pwd = { "pwd": $("#sudo_pwd").val() };
     $.ajax({
         type: 'POST',
         url: "/api/system/reboot",
+        contentType:"application/json",
+        data: JSON.stringify(pwd),
         success: function(){
             $("#notify_system_message").html('<br/><div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Reboot system succeeded.</div>');
         },
@@ -390,10 +392,12 @@ function poweroffSystem() {
     if (!confirm("Please press OK to confirm remote system Poweroff")) {
         return;
     }
-
+    var pwd = { "pwd": $("#sudo_pwd").val() };
     $.ajax({
         type: 'POST',
         url: "/api/system/poweroff",
+        contentType:"application/json",
+        data: JSON.stringify(pwd),
         success: function()
         {
             $("#notify_system_message").html('<br/><div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Poweroff system succeeded.</div>');

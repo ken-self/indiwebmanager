@@ -329,19 +329,32 @@ def get_devices():
 @app.post('/api/system/reboot')
 def system_reboot():
     """reboot the system running indi-web"""
+    data = request.json
+    pwd = data.get('pwd', None)
     logging.info('System reboot, stopping server...')
     stop_server()
     logging.info('rebooting...')
-    subprocess.call('reboot')
-
+    if not pwd:
+        cp = subprocess.run('reboot', capture_output=True)
+    else:
+        cp = subprocess.run(["sudo","-kS", "reboot"], input=pwd, text=True, capture_output=True)
+    if cp.returncode > 0:
+        response.status = 403
 
 @app.post('/api/system/poweroff')
 def system_poweroff():
     """poweroff the system"""
+    data = request.json
+    pwd = data.get('pwd', None)
     logging.info('System poweroff, stopping server...')
     stop_server()
     logging.info('poweroff...')
-    subprocess.run("poweroff")
+    if not pwd:
+        cp = subprocess.run('poweroff', capture_output=True)
+    else:
+        cp = subprocess.run(["sudo","-kS", "poweroff"], input=pwd, text=True, capture_output=True)
+    if cp.returncode > 0:
+        response.status = 403
 
 ###############################################################################
 # INDIHUB Agent control endpoints
