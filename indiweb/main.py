@@ -333,12 +333,16 @@ def system_reboot():
     pwd = data.get('pwd', None)
     logging.info('System reboot, stopping server...')
     stop_server()
-    logging.info('rebooting...')
     if not pwd:
-        cp = subprocess.run('reboot', capture_output=True)
+        logging.info('reboot natively in 1 minute...')
+        cp = subprocess.run(["shutdown","-r","+1"], capture_output=True)
     else:
-        cp = subprocess.run(["sudo","-kS", "reboot"], input=pwd, text=True, capture_output=True)
+        logging.info('reboot with sudo in 1 minute...')
+        cp = subprocess.run(["sudo","-kS", "shutdown","-r","+1"], input=pwd, text=True, capture_output=True)
+
     if cp.returncode > 0:
+        logging.warning(cp.stderr)
+        logging.warning("reboot failed")
         response.status = 403
 
 @app.post('/api/system/poweroff')
@@ -348,12 +352,16 @@ def system_poweroff():
     pwd = data.get('pwd', None)
     logging.info('System poweroff, stopping server...')
     stop_server()
-    logging.info('poweroff...')
     if not pwd:
-        cp = subprocess.run('poweroff', capture_output=True)
+        logging.info('poweroff natively in 1 minute...')
+        cp = subprocess.run(["shutdown","-P","+1"], capture_output=True)
     else:
-        cp = subprocess.run(["sudo","-kS", "poweroff"], input=pwd, text=True, capture_output=True)
+        logging.info('poweroff with sudo in 1 minute...')
+        cp = subprocess.run(["sudo","-kS", "shutdown","-P","+1"], input=pwd, text=True, capture_output=True)
+
     if cp.returncode > 0:
+        logging.warning(cp.stderr)
+        logging.warning("poweroff failed")
         response.status = 403
 
 ###############################################################################
