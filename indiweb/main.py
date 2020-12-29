@@ -341,7 +341,6 @@ def system_reboot():
         cp = subprocess.run(["sudo","-kS", "shutdown","-r","+1"], input=pwd, text=True, capture_output=True)
 
     if cp.returncode > 0:
-        logging.warning(cp.stderr)
         logging.warning("reboot failed")
         response.status = 403
 
@@ -360,7 +359,6 @@ def system_poweroff():
         cp = subprocess.run(["sudo","-kS", "shutdown","-P","+1"], input=pwd, text=True, capture_output=True)
 
     if cp.returncode > 0:
-        logging.warning(cp.stderr)
         logging.warning("poweroff failed")
         response.status = 403
 
