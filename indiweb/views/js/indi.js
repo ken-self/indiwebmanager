@@ -374,6 +374,7 @@ function rebootSystem() {
         return;
     }
     var pwd = { "pwd": $("#sudo_pwd").val() };
+    $("#notify_system_message").html('<br/>');
     $.ajax({
         type: 'POST',
         url: "/api/system/reboot",
@@ -386,6 +387,7 @@ function rebootSystem() {
             alert('Rebooting system failed!');
         }
     });
+    $("#sudo_pwd").val("");
 }
 
 function poweroffSystem() {
@@ -393,6 +395,7 @@ function poweroffSystem() {
         return;
     }
     var pwd = { "pwd": $("#sudo_pwd").val() };
+    $("#notify_system_message").html('<br/>');
     $.ajax({
         type: 'POST',
         url: "/api/system/poweroff",
@@ -407,4 +410,25 @@ function poweroffSystem() {
             alert('Poweroff remote system failed!');
         }
     });
+    $("#sudo_pwd").val("");
+}
+
+function cancelShutdown() {
+    var pwd = { "pwd": $("#sudo_pwd").val() };
+    $("#notify_system_message").html('<br/>');
+    $.ajax({
+        type: 'POST',
+        url: "/api/system/cancelshutdown",
+        contentType:"application/json",
+        data: JSON.stringify(pwd),
+        success: function()
+        {
+            $("#notify_system_message").html('<br/><div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>System  shutdown cancelled.</div>');
+        },
+        error: function()
+        {
+            alert('Shutdown cancel failed!');
+        }
+    });
+    $("#sudo_pwd").val("");
 }

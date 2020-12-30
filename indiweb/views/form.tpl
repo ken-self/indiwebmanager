@@ -115,9 +115,12 @@
                 <label class="control-label">Poweroff Reboot:</label>
                 <button id="system_reboot" onClick="rebootSystem()" class="btn btn-default" data-toggle="tooltip" title="Reboot remote System"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
                 <button id="system_poweroff" onClick="poweroffSystem()" class="btn btn-default" data-toggle="tooltip" title="PowerOff remote System"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></button>
+                <button id="shutdown_cancel" onClick="cancelShutdown()" class="btn btn-default" data-toggle="tooltip" title="Cancel Poweroff/Reboot"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                <div class="form-group">
+                    <label for="sudo_pwd" class="control-label">Password:</label>
+                    <input class="form-control" id="sudo_pwd" name="sudo_pwd" type="password">
+                </div>
                 <div id="notify_system_message"></div>
-                <label for="sudo_pwd" class="control-label">Sudo Password:</label>
-                <input class="form-control" id="sudo_pwd" name="sudo_pwd" type="password">
             </div>
         </div>
     </div>

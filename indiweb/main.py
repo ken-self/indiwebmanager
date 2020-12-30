@@ -331,8 +331,8 @@ def system_reboot():
     """reboot the system running indi-web"""
     data = request.json
     pwd = data.get('pwd', None)
-    logging.info('System reboot, stopping server...')
-    stop_server()
+#    logging.info('System reboot, stopping server...')
+#    stop_server()
     if not pwd:
         logging.info('reboot natively in 1 minute...')
         cp = subprocess.run(["shutdown","-r","+1"], capture_output=True)
@@ -349,8 +349,8 @@ def system_poweroff():
     """poweroff the system"""
     data = request.json
     pwd = data.get('pwd', None)
-    logging.info('System poweroff, stopping server...')
-    stop_server()
+#    logging.info('System poweroff, stopping server...')
+#    stop_server()
     if not pwd:
         logging.info('poweroff natively in 1 minute...')
         cp = subprocess.run(["shutdown","-P","+1"], capture_output=True)
@@ -360,6 +360,22 @@ def system_poweroff():
 
     if cp.returncode > 0:
         logging.warning("poweroff failed")
+        response.status = 403
+
+@app.post('/api/system/cancelshutdown')
+def cancel_shutdown():
+    """cancel shutdown of the system"""
+    data = request.json
+    pwd = data.get('pwd', None)
+    if not pwd:
+        logging.info('cancel shutdown natively...')
+        cp = subprocess.run(["shutdown","-c"], capture_output=True)
+    else:
+        logging.info('cancel shutdown with sudo...')
+        cp = subprocess.run(["sudo","-kS", "shutdown","-c"], input=pwd, text=True, capture_output=True)
+
+    if cp.returncode > 0:
+        logging.warning("shutdown cancel failed")
         response.status = 403
 
 ###############################################################################
