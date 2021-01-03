@@ -45,11 +45,11 @@
              <button class="btn btn-default" onCLick="saveProfile()" data-toggle="tooltip" title="Save Profile"><span class="glyphicon glyphicon-save" aria-hidden="true"></span></button>
              <button class="btn btn-default" onClick="removeProfile()" data-toggle="tooltip" title="Delete Profile"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
            </span>
-		</div>
-		<div>
-		    <label class="checkbox-inline"><input id="profile_auto_start" onChange="saveProfileInfo()" type="checkbox" value="Autostart">Auto Start</label>
-		    <label class="checkbox-inline"><input id="profile_auto_connect" onChange="saveProfileInfo()" type="checkbox" value="Autoconnect">Auto Connect</label>
-		</div>
+        </div>
+        <div>
+            <label class="checkbox-inline"><input id="profile_auto_start" onChange="saveProfileInfo()" type="checkbox" value="Autostart">Auto Start</label>
+            <label class="checkbox-inline"><input id="profile_auto_connect" onChange="saveProfileInfo()" type="checkbox" value="Autoconnect">Auto Connect</label>
+        </div>
        </div>
      </div>
 
@@ -110,24 +110,18 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-6">
-            <div class="form-group">
-                <label class="control-label">Poweroff Reboot:</label>
-                <button id="system_reboot" onClick="rebootSystem()" class="btn btn-default" data-toggle="tooltip" title="Reboot remote System"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
-                <button id="system_poweroff" onClick="poweroffSystem()" class="btn btn-default" data-toggle="tooltip" title="PowerOff remote System"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></button>
-                <button id="shutdown_cancel" onClick="cancelShutdown()" class="btn btn-default" data-toggle="tooltip" title="Cancel Poweroff/Reboot"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                <div class="form-group">
-                    <label for="sudo_pwd" class="control-label">Password:</label>
-                    <input class="form-control" id="sudo_pwd" name="sudo_pwd" type="password">
-                </div>
-                <div id="notify_system_message"></div>
-            </div>
+        <div class="form-group col-sm-3">
+            <label class="control-label">Poweroff Reboot:</label>
+            <button id="system_reboot" onClick="rebootSystem()" class="btn btn-default" data-toggle="tooltip" title="Reboot remote System"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
+            <button id="system_poweroff" onClick="poweroffSystem()" class="btn btn-default" data-toggle="tooltip" title="PowerOff remote System"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></button>
+            <button id="shutdown_cancel" onClick="cancelShutdown()" class="btn btn-default" data-toggle="tooltip" title="Cancel Poweroff/Reboot"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
         </div>
+        <div class="form-group col-sm-3">
+            <input class="form-control" id="sudo_pwd" name="sudo_pwd" type="password" placeholder="sudo Password" data-toggle="tooltip" title="Enter sudo password for shutdown">
+        </div>
+        <div id="notify_system_message"></div>
     </div>
   </div>
-
-  <br />
-  <br />
 
   <div class="container">
     <h4>INDIHUB Network Agent Control <a href="https://indihub.space" target="_blank"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></a></h4>
