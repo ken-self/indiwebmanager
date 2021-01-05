@@ -59,6 +59,17 @@ Then using your favorite web browser, go to
 running locally. If the INDI Web Manager is installed on a remote system,
 simply replace localhost with the hostname or IP address of the remote system.
 
+You can also run INDI Web Manager as a standalone web server supporting SSL.  It can be started
+manually by invoking:
+
+```
+$ indi-web -s cheroot -v
+```
+
+Then using your favorite web browser, go to
+[https://localhost:8624](https://localhost:8624) if the INDI Web Manager is
+running locally.
+
 # Auto Start
 
 If you selected any profile as **Auto Start** then the INDI server shall be
@@ -330,9 +341,9 @@ URL | Method | Return | Format
 
 URL | Method | Return | Format
 --- | --- | --- | ---
-/api/system/reboot| POST | Reboot the system on which the INDI server is running.
+/api/system/reboot| POST | schedules reboot in one minute of the system on which the INDI server is running.
 
-The driver and indi server are closed.
+The driver and indi server are closed. May require a sudo password
 
 **Example:** http://localhost:8624/api/system/reboot
 **Reply:** None
@@ -341,16 +352,27 @@ The driver and indi server are closed.
 
 URL | Method | Return | Format
 --- | --- | --- | ---
-/api/system/poweroff| POST | powers off the system on which the INDI server is running.
+/api/system/poweroff| POST | schedules power off in one minute of the system on which the INDI server is running.
 
-The driver and indi server are closed.
+The driver and indi server are closed. May require a sudo password
 
 **Example:** http://localhost:8624/api/system/poweroff
 **Reply:** None
 
+### Cancel requested shutdown of the system 
+
+URL | Method | Return | Format
+--- | --- | --- | ---
+/api/system/cancelshutdown| POST | cancel a scheduled reboot or poweroff of the system on which the INDI server is running.
+
+**Example:** http://localhost:8624/api/system/cancelshutdown
+**Reply:** None
+
+May require a sudo password.
+
 # Development
 
-To run indiweb directly from the source directory make sure prerequisits are
+To run indiweb directly from the source directory make sure prerequisites are
 installed and use:
 
 ```

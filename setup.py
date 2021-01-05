@@ -20,7 +20,7 @@ setup(
     packages=['indiweb'],
     package_dir={'indiweb': 'indiweb'},
     include_package_data=True,
-    install_requires=['requests', 'psutil', 'bottle'],
+    install_requires=['requests', 'psutil', 'bottle', 'cheroot'],
     license='LGPL',
     zip_safe=False,
     test_suite='tests',

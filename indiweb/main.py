@@ -8,7 +8,7 @@ import socket
 from threading import Timer
 import subprocess
 
-from bottle import Bottle, run, template, static_file, request, response, BaseRequest, default_app
+from bottle import Bottle, run, template, static_file, request, response, BaseRequest, default_app, route, ServerAdapter
 from .indi_server import IndiServer, INDI_PORT, INDI_FIFO, INDI_CONFIG_DIR
 from .driver import DeviceDriver, DriverCollection, INDI_DATA_DIR
 from .database import Database
@@ -46,7 +46,7 @@ parser.add_argument('--verbose', '-v', action='store_true',
                     help='Print more messages')
 parser.add_argument('--logfile', '-l', help='log file name')
 parser.add_argument('--server', '-s', default='standalone',
-                    help='HTTP server [standalone|apache] (default: standalone')
+                    help='HTTP server [standalone|apache|cheroot] (default: standalone')
 
 args = parser.parse_args()
 
@@ -66,6 +66,7 @@ else:
                         level=logging_level)
 
 logging.debug("command line arguments: " + str(vars(args)))
+logging.debug("pkg_path: " + pkg_path)
 
 hostname = socket.gethostname()
 
@@ -83,6 +84,9 @@ collection.parse_custom_drivers(db.get_custom_drivers())
 if args.server == 'standalone':
     app = Bottle()
     logging.info('using Bottle as standalone server')
+elif args.server == 'cheroot':
+    app = Bottle()
+    logging.info('using cheroot as standalone server')
 else:
     app = default_app()
     logging.info('using Apache web server')
@@ -413,7 +417,29 @@ def change_indihub_agent_mode(mode):
 ###############################################################################
 # Startup standalone server
 ###############################################################################
+class SSLCherootAdapter(ServerAdapter):
+    def run(self, handler):
+        from cheroot import wsgi
+        from cheroot.ssl.builtin import BuiltinSSLAdapter
+        import ssl
 
+
+        cacert_path = os.path.join(pkg_path, 'cacert.pem')
+        privkey_path = os.path.join(pkg_path, 'privkey.pem')
+        server = wsgi.Server((self.host, self.port), handler)
+        server.ssl_adapter = BuiltinSSLAdapter(cacert_path, privkey_path)
+##        server = wsgi.Server((self.host, self.port), handler)
+##        server.ssl_adapter = BuiltinSSLAdapter("cacert.pem", "privkey.pem")
+
+        # By default, the server will allow negotiations with extremely old protocols
+        # that are susceptible to attacks, so we only allow TLSv1.2
+        server.ssl_adapter.context.options |= ssl.OP_NO_TLSv1
+        server.ssl_adapter.context.options |= ssl.OP_NO_TLSv1_1
+
+        try:
+            server.start()
+        finally:
+            server.stop()
 
 def main():
     """Start autostart profile if any"""
@@ -425,7 +451,10 @@ def main():
             active_profile = profile['name']
             break
 
-    run(app, host=args.host, port=args.port, quiet=args.verbose)
+    if args.server == 'cheroot':
+        run(app=app, host=args.host, port=args.port, quiet=args.verbose, server=SSLCherootAdapter)
+    else:
+        run(app, host=args.host, port=args.port, quiet=args.verbose)
     logging.info("Exiting")
 
 
