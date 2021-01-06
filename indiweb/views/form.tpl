@@ -119,7 +119,9 @@
         <div class="form-group col-sm-3">
             <input class="form-control" id="sudo_pwd" name="sudo_pwd" type="password" placeholder="sudo Password" data-toggle="tooltip" title="Enter sudo password for shutdown">
         </div>
-        <div id="notify_system_message"></div>
+        <div class="col-sm-6">
+            <div id="notify_system_message"></div>
+        </div>
     </div>
   </div>
 

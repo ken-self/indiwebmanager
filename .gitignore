@@ -1,4 +1,5 @@
 *.pyc
+*.pem
 *.egg-info
 *~
 __pycache__/**
